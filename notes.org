@@ -1,0 +1,6 @@
+
+* Issues
+- [ ] Transitions affect overall vbuffer, therefore room dirt does not
+  work while fading in
+* Wishlist
+- [ ] Add camera-coordinate translation
