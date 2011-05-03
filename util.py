@@ -5,10 +5,15 @@ class State:
 from pygame import Rect
 
 class Facing:
-    NORTH = 0
-    SOUTH = 1
-    EAST = 2
-    WEST = 3
+    directions = (NORTH,SOUTH,EAST,WEST) = range(4)
     @staticmethod
     def to_anim_name(facing):
         return ['face north','face south','face east','face west'][facing]
+
+def sink(v, a):
+    return 0 if abs(v) <= abs(a) else (v-math.copysign(a, v))
+def damp(v, factor):
+    return sink(v, v*factor)
+def signum(n):
+    return 0 if n == 0 else 1 if n > 0 else -1
+

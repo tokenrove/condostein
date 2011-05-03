@@ -2,5 +2,7 @@
 * Issues
 - [ ] Transitions affect overall vbuffer, therefore room dirt does not
   work while fading in
+- [ ] Actor positions/rectangle should have coordinated accessors
+  (position is center, while rect is offset)
 * Wishlist
 - [ ] Add camera-coordinate translation

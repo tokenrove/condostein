@@ -25,7 +25,7 @@ class Sprite:
         if self.animation_name == name: return
         self.animation_name = name
         self.__a = self.animations[name]
-        (self.frame,self.rect_valid,self.accumulated_t,self.has_looped) = (0,False,0,False)
+        (self.frame,self.rect_valid,self.__accumulated_t,self.has_looped) = (0,False,0,False)
 
     def invalidate_rect(self): pass
 
@@ -35,12 +35,12 @@ class Sprite:
         self.rect_valid = True
 
     def update(self, delta_t):
-        self.accumulated_t += delta_t
+        self.__accumulated_t += delta_t
         duration = self.__a[self.frame][0]
-        if duration != 0 and self.accumulated_t > duration:
+        if duration != 0 and self.__accumulated_t > duration:
             self.frame = (self.frame + 1) % len(self.__a)
             if self.frame == 0: self.has_looped = True
-            (self.rect_valid,self.accumulated_t) = (False,0)
+            (self.rect_valid,self.__accumulated_t) = (False,0)
 
         if not self.rect_valid:
             self.invalidate_rect()

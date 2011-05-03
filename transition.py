@@ -11,7 +11,7 @@ class Sequence(State):
     def update(self, delta_t):
         if not self.sequence: return self.after
 
-        if self.atop: self.atop = self.atop.update(delta_t)
+        if self.atop is not None: self.atop = self.atop.update(delta_t)
 
         _ = self.sequence[0].update(delta_t)
         if _ is not self.sequence[0]:
@@ -26,7 +26,7 @@ class Generic(State):
 
     def update(self, delta_t):
         self.accumulated_t += delta_t
-        if self.atop: self.atop = self.atop.update(delta_t)
+        if self.atop is not None: self.atop = self.atop.update(delta_t)
         self.around_update(delta_t)
         return self if self.accumulated_t < self.duration else self.after
 

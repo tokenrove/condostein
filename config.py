@@ -16,6 +16,8 @@ JOYSTICK_EPSILON = 0.01
 SPLASH_IMAGE = 'splash.png'
 TITLE_IMAGE = 'title.png'
 IDLE_TIME_BEFORE_DEMO = 10
+ENDGAME_IMAGE = 'splash.png'
+END_GAME_DISPLAY_TIME = 10
 
 from pygame.locals import *
 KEY_BINDINGS = {
