@@ -1,8 +1,48 @@
 
+* Tasks
+- [ ] New art so primary actors do not change collision size
+- [ ] Tool-assisted process for creating rooms
+- [ ] Connected rooms comprise a level; teleporter to escape;
+  intermediary stats screen.
+- [X] humanoid can die
+- [ ] robots explode
+- [ ] Border for bottom of screen.
+- [ ] separate out OSD code
+- [ ] Robot motion planning: simple A* pathfinding to goal
+      | roaming | see humanoid   | hunting -- humanoid as goal                      |
+      | roaming | hear shots     | hunting -- shot origin as goal                   |
+      | roaming | smell humanoid | hunting -- adjacent area with most smell as goal |
+- [ ] robots can shoot
+- [ ] ghost of robots (Evil Otto except proportional to dead robots in room)
+- [ ] music playback (berzerk-tune-1.mp3)
+- [ ] sound effects subsystem (shots, screams)
+- [ ] physics: instead of tile collision, compute walkable regions
+
+
 * Issues
-- [ ] Transitions affect overall vbuffer, therefore room dirt does not
+- [ ] pygame.Rect coordinates are integers, which sucks for physics.
+  Move anything affected by physics to a non-Rect object.
+- [X] Transitions affect overall vbuffer, therefore room dirt does not
   work while fading in
-- [ ] Actor positions/rectangle should have coordinated accessors
+- [X] Actor positions/rectangle should have coordinated accessors
   (position is center, while rect is offset)
+- [X] tile collision is totally fucked -- fixing physics with walkable
+  regions would be one way to do this
+  - i note that physaxe injects points of contact into an arbiter
 * Wishlist
+- [ ] diagonal directions for player and robots
 - [ ] Add camera-coordinate translation
+- [ ] fixed transition dirt issue by adding overlay -- would be nice
+    to have more overlay functionality to allow more complex
+    transitions like slides
+
+* Notes
+** Walkability
+
+A walkable area has its rectangle (world coordinates), a list of
+adjacent walkable areas, and possibly extra state (for example,
+humanoid smell).
+
+
+I'm considering generating the levels like mazes, so I'd generate
+walkability information at the same time.

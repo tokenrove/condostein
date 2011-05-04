@@ -3,23 +3,18 @@ import env
 from util import Rect
 
 class Sprite:
-    @property
-    def position(self): return (self.x, self.y)
-    #position = property(lambda self: (self.x,self.y))
-    @position.setter
-    def position(self, value): (self.x,self.y) = value
-
     def __init__(self, slab=None, animations=None, position=(0,0), **kwds):
         if animations is None: animations = {'default':[(0,Rect(0,0,slab.w,slab.h))]}
         (self.slab,self.animations) = (slab,animations)
         self.animation_name = None
         self.animation(self.animations.keys()[0])
-        dim = self.__a[self.frame][1].size
-        (self.x,self.y) = position
+        self.rect = Rect(position, (0,0))
         self._update_rect()
+        self.hidden = False
 
     def draw(self):
-        env.vbuffer.blit(self.slab, self.rect, self.__a[self.frame][1])
+        if not self.hidden:
+            env.vbuffer.blit(self.slab, self.rect, self.__a[self.frame][1])
 
     def animation(self, name):
         if self.animation_name == name: return
@@ -30,8 +25,7 @@ class Sprite:
     def invalidate_rect(self): pass
 
     def _update_rect(self):
-        dim = self.__a[self.frame][1].size
-        self.rect = Rect((math.floor(self.x-dim[0]/2), math.floor(self.y-dim[1]/2)), dim)
+        self.rect.size = self.__a[self.frame][1].size
         self.rect_valid = True
 
     def update(self, delta_t):
