@@ -208,6 +208,7 @@ class GameState(State):
             self.room.update(delta_t)
         env.vbuffer.fill(0,(0,208,320,32))
         self.font.blit('%08d' % self.player.score, (10,220))
+        self.font.blit('Level %s' % (1+self.current_level), (10,228))
         self.font.blit('Lives: %s' % ('*' * self.player.lives), (200,220))
         if env.tapped['DEBUG_TOGGLE']:
             self.debug_toggle = not self.debug_toggle
@@ -226,7 +227,7 @@ class TitleState(State):
         State.__init__(self, **kwds)
         # XXX title state can be a singleton; cache resources and so on after the first time
         self.title = slabcache.load(config.TITLE_IMAGE)
-        self.accumulated_t = 0
+        (self.accumulated_t, self.paused) = (0, False)
         self.font = font.TroglodyteFont('megafont.png')
         self.selected = 0
         self.menu = [('START', self.start_new_game),
@@ -248,6 +249,7 @@ class TitleState(State):
         env.vbuffer.blit(self.title, (0,0))
 
         self.draw_crude_menu()
+        if self.paused: return self
         if env.tapped['ESCAPE']: return None
         if env.tapped['UP']: self.selected = (self.selected-1) % len(self.menu)
         if env.tapped['DOWN']: self.selected = (self.selected+1) % len(self.menu)
@@ -256,19 +258,30 @@ class TitleState(State):
         if any(env.tapped.values()):
             self.accumulated_t = 0
         if self.accumulated_t > config.IDLE_TIME_BEFORE_DEMO:
+            self.paused = True
             return transition.FadeOutIn(out_from=self, in_to=DemoState())
         return self
 
 class DemoState(State):
     def __init__(self, **kwds):
         State.__init__(self, **kwds)
+        self.accumulated_t = 0
+
+    def update(self, delta_t):
+        self.accumulated_t += delta_t
+        env.vbuffer.fill(0x42aace)
+        if any(env.tapped.values()) or self.accumulated_t > config.DEMO_DURATION:
+            return transition.Fade(start=0.0, end=1.0, atop=TitleState())
+        return self
 
 import logging
 def main():
     if '-debug' in sys.argv:
         logging.getLogger().setLevel(logging.DEBUG)
     random.seed()
-    env.init()
+    options = set()
+    if '-fs' in sys.argv: options.add('fullscreen')
+    env.init(options)
     state = TitleState()
     if not '-fast' in sys.argv:
         state = transition.FadeInOut(hold_duration=2, atop=fluff.SplashState(),

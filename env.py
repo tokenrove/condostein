@@ -17,7 +17,7 @@ pressed = dict().fromkeys(buttons, False)
 tapped = dict().fromkeys(buttons, False)
 joysticks = []
 
-def init():
+def init(options):
     pygame.init()
     # clock for frame timing
     global clock
@@ -25,7 +25,8 @@ def init():
     # init display
     dim = config.VIRTUAL_DIMENSIONS
     if config.SCALE != 1: dim = map(lambda x:config.SCALE*x, dim)
-    pygame.display.set_mode(dim)
+    pygame.display.set_mode(dim, 0 if 'fullscreen' not in options else pygame.FULLSCREEN)
+    pygame.mouse.set_visible(False)
     global vbuffer, display_sface, _overlay
     vbuffer = display_sface = pygame.display.get_surface()
     if config.SCALE != 1:

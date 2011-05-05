@@ -5,6 +5,8 @@ class SplashState(State):
     def __init__(self, **kwds):
         State.__init__(self, **kwds)
         self.splash = slabcache.load(config.SPLASH_IMAGE)
+
+    def update(self, delta_t):
         env.vbuffer.blit(self.splash, (0,0))
 
     def __del__(self):
