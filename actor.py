@@ -125,8 +125,12 @@ class RobotActor(Actor):
 
     def hunt(self, delta_t): pass
     def dying(self, delta_t):
-        self.die()
-        pass
+        self.dying_counter -= delta_t
+        self.facing = (self.facing + 1) % len(Facing.directions)
+        self.animation(Facing.to_anim_name(self.facing))
+        if int(self.dying_counter*100) % 3 == 0: self.hidden = not self.hidden
+        if self.dying_counter < 0:
+            self.die()
 
     def collide(self, other):
         if self.act_fn == self.dying: return False
@@ -140,6 +144,7 @@ class RobotActor(Actor):
         self.act_fn = self.roam
         self.facing = random.choice(Facing.directions)
         self.animation(Facing.to_anim_name(self.facing))
+        self.dying_counter = 1.5
 
     def act(self, delta_t):
         self.act_fn(delta_t)
@@ -167,10 +172,10 @@ archetypes = {
          'walking speed':50,    # pixels/second
          'shot speed':45,       # pixels/second
          'collision rectangle': (0,0,25,25),
-         'animations':{'face south': [(0,Rect(0,0,25,22))],
-                       'face north': [(0,Rect(25,0,25,22))],
-                       'face east': [(0,Rect(50,0,22,25))],
-                       'face west': [(0,Rect(72,0,22,25))],},
+         'animations':{'face south': [(0,Rect(0,0,25,20))],
+                       'face north': [(0,Rect(25,0,25,20))],
+                       'face east': [(0,Rect(50,0,20,25))],
+                       'face west': [(0,Rect(70,0,20,25))],},
          },
     'shot':
         {'class':ShotActor,

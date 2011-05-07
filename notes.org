@@ -35,6 +35,7 @@
 - [ ] fixed transition dirt issue by adding overlay -- would be nice
     to have more overlay functionality to allow more complex
     transitions like slides
+- [ ] despair multiplier for points
 
 * Notes
 ** Walkability

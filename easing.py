@@ -6,7 +6,7 @@ def linear(elapsed, duration):
 def cubic(elapsed, duration):
     elapsed = elapsed / duration
     return elapsed * elapsed * elapsed
-    
+
 def make_elastic(period, amplitude):
     decay = period / (2*math.pi) * math.asin(1.0/amplitude)
     def fn(elapsed, duration):
