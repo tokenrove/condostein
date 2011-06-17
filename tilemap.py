@@ -17,10 +17,9 @@ class SimpleTilemap:
         tshift = self.tile_dim_pot
         tmask = ~((1<<self.tile_dim_pot)-1)
         # only draw tiles in region offset by camera
-        for y in xrange(region.y&tmask, self.tile_dim+(region.bottom&tmask), self.tile_dim):
-            for x in xrange(region.x&tmask, self.tile_dim+(region.right&tmask), self.tile_dim):
-                if (x>>tshift) in range(0,self.w) and (y>>tshift) in range(0,self.h):
-                   env.vbuffer.blit(self.slab, (x,y),
-                                    (self.map[(x>>tshift) + ((y>>tshift) * self.w)] * self.tile_dim,
-                                     0, self.tile_dim, self.tile_dim))
+        for y in xrange(max(0,region.y&tmask), min(self.h<<tshift,self.tile_dim+(region.bottom&tmask)), self.tile_dim):
+            for x in xrange(max(0,region.x&tmask), min(self.w<<tshift,self.tile_dim+(region.right&tmask)), self.tile_dim):
+                env.vbuffer.blit(self.slab, (x,y),
+                                 (self.map[(x>>tshift) + ((y>>tshift) * self.w)] * self.tile_dim,
+                                  0, self.tile_dim, self.tile_dim))
 
